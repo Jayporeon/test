@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Synology 用戶申請系統</title>
+    <style>
+        :root {
+            --color-white: rgba(255, 255, 255, 1);
+            --color-black: rgba(0, 0, 0, 1);
+            --color-cream-50: rgba(252, 252, 249, 1);
+            --color-cream-100: rgba(255, 255, 253, 1);
+            --color-gray-200: rgba(245, 245, 245, 1);
+            --color-gray-300: rgba(167, 169, 169, 1);
+            --color-gray-400: rgba(119, 124, 124, 1);
+            --color-slate-500: rgba(98, 108, 113, 1);
+            --color-brown-600: rgba(94, 82, 64, 1);
+            --color-charcoal-700: rgba(31, 33, 33, 1);
+            --color-charcoal-800: rgba(38, 40, 40, 1);
+            --color-slate-900: rgba(19, 52, 59, 1);
+            --color-teal-300: rgba(50, 184, 198, 1);
+            --color-teal-400: rgba(45, 166, 178, 1);
+            --color-teal-500: rgba(33, 128, 141, 1);
+            --color-teal-600: rgba(29, 116, 128, 1);
+            --color-teal-700: rgba(26, 104, 115, 1);
+            --color-red-400: rgba(255, 84, 89, 1);
+            --color-red-500: rgba(192, 21, 47, 1);
+            --color-green-500: rgba(34, 197, 94, 1);
+            --color-orange-400: rgba(230, 129, 97, 1);
+            --color-orange-500: rgba(168, 75, 47, 1);
+            
+            --color-brown-600-rgb: 94, 82, 64;
+            --color-teal-500-rgb: 33, 128, 141;
+            --color-slate-900-rgb: 19, 52, 59;
+            --color-red-500-rgb: 192, 21, 47;
+            
+            --color-background: var(--color-cream-50);
+            --color-surface: var(--color-cream-100);
+            --color-text: var(--color-slate-900);
+            --color-text-secondary: var(--color-slate-500);
+            --color-primary: var(--color-teal-500);
+            --color-primary-hover: var(--color-teal-600);
+            --color-primary-active: var(--color-teal-700);
+            --color-secondary: rgba(var(--color-brown-600-rgb), 0.12);
+            --color-secondary-hover: rgba(var(--color-brown-600-rgb), 0.2);
+            --color-border: rgba(var(--color-brown-600-rgb), 0.2);
+            --color-btn-primary-text: var(--color-cream-50);
+            --color-card-border: rgba(var(--color-brown-600-rgb), 0.12);
+            --color-error: var(--color-red-500);
+            --color-success: var(--color-green-500);
+            --color-focus-ring: rgba(var(--color-teal-500-rgb), 0.4);
+            
+            --space-8: 8px;
+            --space-12: 12px;
+            --space-16: 16px;
+            --space-20: 20px;
+            --space-24: 24px;
+            --space-32: 32px;
+            
+            --radius-base: 8px;
+            --radius-lg: 12px;
+            
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.04), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+            
+            --duration-normal: 250ms;
+            --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        html {
+            font-size: 14px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.5;
+            color: var(--color-text);
+            background-color: var(--color-background);
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        
+        h1, h2, h3 {
+            margin: 0;
+            font-weight: 600;
+            line-height: 1.2;
+        }
+        
+        h1 {
+            font-size: 30px;
+        }
+        
+        h2 {
+            font-size: 24px;
+            margin-bottom: var(--space-16);
+        }
+        
+        h3 {
+            font-size: 18px;
+        }
+        
+        p {
+            margin: 0 0 var(--space-16) 0;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: var(--space-24);
+        }
+        
+        .card {
+            background-color: var(--color-surface);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--color-card-border);
+            box-shadow: var(--shadow-sm);
+            padding: var(--space-24);
+            margin-bottom: var(--space-20);
+        }
+        
+        .form-group {
+            margin-bottom: var(--space-16);
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: var(--space-8);
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: var(--space-12);
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--color-text);
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-base);
+            transition: border-color var(--duration-normal) var(--ease-standard);
+        }
+        
+        .form-control:focus {
+            outline: 2px solid var(--color-primary);
+            outline-offset: 0;
+            border-color: var(--color-primary);
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-12) var(--space-20);
+            border-radius: var(--radius-base);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all var(--duration-normal) var(--ease-standard);
+            text-decoration: none;
+        }
+        
+        .btn:focus-visible {
+            outline: 2px solid var(--color-primary);
+            outline-offset: 2px;
+        }
+        
+        .btn--primary {
+            background: var(--color-primary);
+            color: var(--color-btn-primary-text);
+            width: 100%;
+        }
+        
+        .btn--primary:hover {
+            background: var(--color-primary-hover);
+        }
+        
+        .btn--primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .alert {
+            padding: var(--space-12) var(--space-16);
+            border-radius: var(--radius-base);
+            margin-bottom: var(--space-16);
+            font-size: 14px;
+        }
+        
+        .alert--success {
+            background-color: rgba(34, 197, 94, 0.1);
+            color: #166534;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+        
+        .alert--error {
+            background-color: rgba(192, 21, 47, 0.1);
+            color: #7f1d1d;
+            border: 1px solid rgba(192, 21, 47, 0.3);
+        }
+        
+        .alert--info {
+            background-color: rgba(33, 128, 141, 0.1);
+            color: #134252;
+            border: 1px solid rgba(33, 128, 141, 0.3);
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: var(--space-32);
+        }
+        
+        .header p {
+            color: var(--color-text-secondary);
+            margin: 0;
+        }
+        
+        .permissions {
+            background-color: rgba(var(--color-teal-500-rgb), 0.05);
+            border: 1px solid rgba(var(--color-teal-500-rgb), 0.2);
+            border-radius: var(--radius-base);
+            padding: var(--space-16);
+            margin-bottom: var(--space-16);
+        }
+        
+        .permissions h3 {
+            margin-top: 0;
+            margin-bottom: var(--space-12);
+            font-size: 16px;
+        }
+        
+        .permission-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: var(--space-8);
+            font-size: 14px;
+        }
+        
+        .permission-item::before {
+            content: "✓";
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            margin-right: var(--space-8);
+            background-color: var(--color-teal-500);
+            color: var(--color-btn-primary-text);
+            border-radius: 50%;
+            font-weight: bold;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+        
+        .password-strength {
+            font-size: 12px;
+            margin-top: var(--space-8);
+            color: var(--color-text-secondary);
+        }
+        
+        .strength-bar {
+            display: flex;
+            gap: 4px;
+            margin: var(--space-8) 0;
+        }
+        
+        .strength-segment {
+            height: 4px;
+            flex: 1;
+            background-color: var(--color-gray-200);
+            border-radius: 2px;
+            transition: background-color var(--duration-normal);
+        }
+        
+        .strength-segment.weak {
+            background-color: var(--color-red-500);
+        }
+        
+        .strength-segment.medium {
+            background-color: var(--color-orange-400);
+        }
+        
+        .strength-segment.strong {
+            background-color: var(--color-green-500);
+        }
+        
+        .success-message {
+            text-align: center;
+        }
+        
+        .success-message h2 {
+            color: var(--color-success);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="formSection">
+            <div class="header">
+                <h1>Synology 用戶申請</h1>
+                <p>建立您的帳號以存取企業內部服務</p>
+            </div>
+            
+            <div id="alertContainer"></div>
+            
+            <div class="card">
+                <div class="permissions">
+                    <h3>帳號權限</h3>
+                    <div class="permission-item">Synology Drive 存取</div>
+                    <div class="permission-item">Synology Chat 存取</div>
+                    <div class="permission-item">Synology Photos 存取</div>
+                </div>
+                
+                <form id="registrationForm">
+                    <div class="form-group">
+                        <label class="form-label" for="username">帳號名稱 *</label>
+                        <input 
+                            type="text" 
+                            id="username" 
+                            class="form-control" 
+                            placeholder="例: john.doe"
+                            required
+                            pattern="[a-zA-Z0-9._-]{3,20}"
+                            title="3-20 個字符，只允許字母、數字、點、底線或連字符"
+                        >
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="email">電子郵件 *</label>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            class="form-control" 
+                            placeholder="您的公司郵箱"
+                            required
+                        >
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="fullname">姓名 *</label>
+                        <input 
+                            type="text" 
+                            id="fullname" 
+                            class="form-control" 
+                            placeholder="例: 王小明"
+                            required
+                        >
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="password">密碼 *</label>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            class="form-control" 
+                            placeholder="至少8個字符，包含大小寫和數字"
+                            required
+                            minlength="8"
+                        >
+                        <div class="password-strength">
+                            <div class="strength-bar">
+                                <div class="strength-segment" id="strength0"></div>
+                                <div class="strength-segment" id="strength1"></div>
+                                <div class="strength-segment" id="strength2"></div>
+                            </div>
+                            <span id="strengthText">密碼強度: 弱</span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="confirmPassword">確認密碼 *</label>
+                        <input 
+                            type="password" 
+                            id="confirmPassword" 
+                            class="form-control" 
+                            placeholder="再次輸入密碼"
+                            required
+                        >
+                    </div>
+                    
+                    <button type="submit" class="btn btn--primary" id="submitBtn">
+                        申請帳號
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+        <div id="successSection" class="hidden">
+            <div class="card success-message">
+                <h2>✓ 申請成功</h2>
+                <p>您的帳號已建立！</p>
+                <p id="successUsername"></p>
+                <div class="alert alert--info">
+                    <strong>下一步：</strong><br>
+                    您現在可以使用以下服務：
+                    <ul style="margin: var(--space-12) 0 0 var(--space-20); padding-left: var(--space-16);">
+                        <li>Synology Drive</li>
+                        <li>Synology Chat</li>
+                        <li>Synology Photos</li>
+                    </ul>
+                </div>
+                <button class="btn btn--primary" onclick="location.reload()">
+                    建立另一個帳號
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const form = document.getElementById('registrationForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const alertContainer = document.getElementById('alertContainer');
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        
+        // 密碼強度檢測
+        function checkPasswordStrength(password) {
+            let strength = 0;
+            if (password.length >= 8) strength++;
+            if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[^a-zA-Z0-9]/.test(password)) strength++;
+            return Math.min(strength, 3);
+        }
+        
+        passwordInput.addEventListener('input', (e) => {
+            const strength = checkPasswordStrength(e.target.value);
+            const texts = ['弱', '中', '強'];
+            const classes = ['weak', 'medium', 'strong'];
+            
+            document.getElementById('strengthText').textContent = `密碼強度: ${texts[strength - 1] || '弱'}`;
+            
+            for (let i = 0; i < 3; i++) {
+                const segment = document.getElementById(`strength${i}`);
+                segment.className = 'strength-segment';
+                if (i < strength) {
+                    segment.classList.add(classes[i]);
+                }
+            }
+        });
+        
+        function showAlert(message, type = 'error') {
+            alertContainer.innerHTML = `<div class="alert alert--${type}">${message}</div>`;
+        }
+        
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const fullname = document.getElementById('fullname').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            // 驗證
+            if (!username || !email || !fullname || !password || !confirmPassword) {
+                showAlert('請填寫所有必填欄位', 'error');
+                return;
+            }
+            
+            if (password.length < 8) {
+                showAlert('密碼至少需要 8 個字符', 'error');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showAlert('密碼與確認密碼不符', 'error');
+                return;
+            }
+            
+            const strength = checkPasswordStrength(password);
+            if (strength < 2) {
+                showAlert('密碼強度過弱，請包含大小寫和數字', 'error');
+                return;
+            }
+            
+            submitBtn.disabled = true;
+            submitBtn.textContent = '申請中...';
+            
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username,
+                        email,
+                        fullname,
+                        password
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showAlert(`帳號 "${username}" 已成功建立！`, 'success');
+                    document.getElementById('formSection').classList.add('hidden');
+                    document.getElementById('successSection').classList.remove('hidden');
+                    document.getElementById('successUsername').textContent = `帳號名稱: ${username}`;
+                } else {
+                    showAlert(data.message || '申請失敗，請稍後重試', 'error');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = '申請帳號';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('網路連線錯誤，請稍後重試', 'error');
+                submitBtn.disabled = false;
+                submitBtn.textContent = '申請帳號';
+            }
+        });
+    </script>
+</body>
+</html>
